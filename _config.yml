@@ -1,8 +1,8 @@
 ### GENERAL SETTINGS ###
 
 # Site settings
-title: SOLID.
-description: "Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description."
+title: Ernest Chan
+description: "Ernest Chan's professional portfolio"
 analytics: #Google analytics code in the format XX-nnnnnnnn-n
 baseurl: "" #important: start with /
 url: "http://yourdomain.com"
@@ -40,11 +40,9 @@ social:
 # Postal address (add as many lines as necessary). Shown in footer and on Contact page.
 address:
   - lines: 
-    - Some Ave, 987,
-    - 23890, New York,
     - United States.
-email: hello@solidtheme.com
-tel: +34 8493-4893
+email: ekc1@rice.edu
+tel: 
 
 
 ### GENERAL DATA FOR VARIOUS LOCATIONS ###
