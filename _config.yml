@@ -1,9 +1,9 @@
 # Site settings
-title: *folio
-email: you@example.com
+title: Ernest Chan
+email: ekc1@rice.edu
 description: > # this means to ignore newlines until "baseurl:"
-  A simple, whitespace, helvetica based portfolio theme.
-baseurl:  # the subpath of your site, e.g. /blog/
+  Professional portfolio and blog of Ernest Chan
+baseurl: # the subpath of your site, e.g. /blog/
 url:  # the base hostname & protocol for your site
 twitter_username: twitter_username
 github_username:  github_username

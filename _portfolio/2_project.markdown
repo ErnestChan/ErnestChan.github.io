@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Project
-description: a project with a background image
+title: Human Activity Recognition
+description: Classifying gym exercises using IMU data
 img: /img/2.jpg
 ---
 

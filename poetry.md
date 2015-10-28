@@ -1,6 +1,6 @@
 ---
 layout: page
-permalink: /poetry/
+permalink: /Poetry/
 title: poetry
 description: Showcase your writing, short stories, or poems. Replace this text with your description.
 ---
