@@ -1,3 +1,6 @@
+##Ernest Wrote this
+use "jekyll build" to build the site and "jekyll serve" to run on my own computer at "http://localhost:4000"
+
 # *folio
 A simple theme for showcasing your work, emphasis on whitespace, transparency, and helvetica. 
 

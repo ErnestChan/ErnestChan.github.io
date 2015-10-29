@@ -2,54 +2,26 @@
 layout: post
 title: Senior Design
 description: Senior Design Project
-img: /img/12.jpg
+img: /img/SD/SingleSlideDesc.png
 ---
 
-Every project has a beautiful feature shocase page. It's easy to include images, in a flexible 3-column grid format. Make your photos 1/3, 2/3, or full width.
+My senior design project was to develop a system for a heart pump that gives patients an interface to their pump and provides remote monitoring capabilities. The pump, named Aortix<sup>TM</sup>, is the product of a venture-backed biotech company in Houston, <a href="http://www.procyrion.com/" target="_blank">Procyrion Inc</a>, and is undergoing FDA approval.
 
-To give your project a background in the portfolio page, just add the img tag to the front matter like so: 
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=87zXfmAA4AI" target="_blank"> 
+<img class="img_row_full" src="{{ site.baseurl }}/img/SD/flowtasticVid.png" alt="video describing our project" title="video describing our project"/>
+</a>
 
-	---
-	layout: post
-	title: Project
-	description: a project with a background image
-	img: /img/12.jpg
-	---
+Here is a single slide description of our project. Our team name was Flowtastic, and the system we developed consisted of 3 parts. Starting at the patient, our Arduino-based system interfaces with the Aortix<sup>TM</sup> pump's control box. The Arduino system talks to a smart phone app we developed, which talks to an electronic medical record (EMR) system on the doctor's side. We used an open-source EMR to simulate what the doctor would see.
 
+<img class="img_row_full" src="{{ site.baseurl }}/img/SD/SingleSlideDesc.png" alt="single slide description of our senior design project" title="single slide description of our senior design project"/>
 
-<div class="img_row">
-	<img class="col one" src="{{ site.baseurl }}/img/1.jpg" alt="" title="example image"/>
-	<img class="col one" src="{{ site.baseurl }}/img/2.jpg" alt="" title="example image"/>
-	<img class="col one" src="{{ site.baseurl }}/img/3.jpg" alt="" title="example image"/>
+I worked mainly on the Arduino-based system. This system recieves data and sends commands to the Aortix<sup>TM</sup> control box via UART. It also communicates via Bluetooth to the smartphone. Because the smartphone is not always connected to the Arduino, there is an SD card on the Arduino for data to be sent. We wrote code for block-sized data storage and retrieval. The system is also capable of changing the pump speed based on the patient's weight fluctuation, or a Doctor's command, which could be sent from the EMR portal.
+
+<img class="img_row_full" src="{{ site.baseurl }}/img/SD/flowtastic01.jpg" alt="our arduino system" title="our arduino system"/>
+<div class="col three caption" style="float=left;">
+	Left: Our team! Right:The Flowtastic Arduino module.
 </div>
-<div class="col three caption">
-	Caption photos easily. On the left, a road goes through a tunnel. Middle, leaves artistically fall in a hipster photoshoot. Right, in another hipster photoshoot, a lumberjack grasps a handful of pine needles.
-</div>
-<div class="img_row">
-	<img class="col three" src="{{ site.baseurl }}/img/5.jpg" alt="" title="example image"/>
-</div>
-<div class="col three caption">
-	This image can also have a caption. It's like magic. 
-</div>
+<br>
 
-You can also put regular text between your rows of images. Say you wanted to write a little bit about your project before you posted the rest of the images. You describe how you toiled, sweated, *bled* for your project, and then.... you reveal it's glory in the next row of images.
+Check out an article about the project on Texas Medical Center <a href="http://www.tmcnews.org/2015/04/students-use-smarts-damaged-hearts/" target="_blank"> news </a>
 
-
-<div class="img_row">
-	<img class="col two" src="{{ site.baseurl }}/img/6.jpg" alt="" title="example image"/>
-	<img class="col one" src="{{ site.baseurl }}/img/11.jpg" alt="" title="example image"/>
-</div>
-<div class="col three caption">
-	You can also have artistically styled 2/3 + 1/3 images, like these.
-</div>
-
-
-<br/><br/><br/>
-
-
-The code is simple. Just add a col class to your image, and another class specifying the width: one, two, or three columns wide. Here's the code for the last row of images above: 
-
-	<div class="img_row">
-	  <img class="col two" src="/img/6.jpg"/>
-	  <img class="col one" src="/img/11.jpg"/>
-	</div>
