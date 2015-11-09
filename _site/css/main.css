@@ -67,7 +67,8 @@ li > ol {
  * Headings
  */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 100; }
+  font-weight: 100;
+  line-height: 1.5em; }
 
 /**
  * Links
@@ -409,7 +410,7 @@ pre {
   color: #aaa;
   text-align: center;
   vertical-align: middle;
-  font-size: 12px; }
+  font-size: 14px; }
 
 /**
  * Syntax highlighting styles

@@ -20,7 +20,7 @@ $nav-height:                    56px;
 /* portfolio tinkering */
 $img_spacing: 5px; 
 $img_height: 275px;
-$caption_font_size: 12px;
+$caption_font_size: 14px;
 $caption_color: #aaa;
 
 /* COLORS  */
@@ -115,6 +115,7 @@ li {
  */
 h1, h2, h3, h4, h5, h6 {
     font-weight: 100;
+    line-height: $base-line-height;
 }
 
 

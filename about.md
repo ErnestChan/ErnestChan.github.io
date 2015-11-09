@@ -7,15 +7,14 @@ permalink: /about/
 <img class="col one right" src="/img/prof_pic.gif">
 
 <br/>
-Thanks for checking out this site! My name is Ernest Chan. I'm a Master's student in Electrical Engineering (EE) at Rice University specializing in Data Science. I also did my undergraduate degree at Rice in EE and was heading down the traditional EE route until I discovered machine learning. I plan to join industry as a Data Scientist after graduation. Some of my data science/machine learning related projects will be posted on this site.
+My name is Ernest Chan. I'm a Master's student in Electrical Engineering (EE) at Rice University specializing in Data Science. I also did my undergraduate degree at Rice in EE and was heading down the traditional EE route until I discovered machine learning. I plan to join industry as a Data Scientist after graduation. Some of my data science/machine learning related projects will be posted on this site.
 
 
 
 <br/>
 <hr/>
 <br/>
-
-<a href="/img/ErnestChanResume.pdf">Resume</a>
+<a href="/img/ErnestChanResume.pdf">My resume</a>
 <br/>
 <hr/>
 <br/>
