@@ -26,8 +26,9 @@ It was interesting working with real-time code, as you're always in an infinite 
 Memory limitations. Our program initially used up all of the Arduino Uno's 2 kB of SRAM, which caused some very abnormal behavior that was hard to debug. After actually writing some code to print out the SRAM usage did we understand the cause of the problem.
 
 Figuring out the messaging protocol between the Arduino and the Android phone.
-
+<div>
 <img class="img_row_full" src="{{ site.baseurl }}/img/SD/flowtastic01.jpg" alt="our arduino system" title="our arduino system"/>
+</div>
 <div class="col three caption" style="float=left;">
 	Left: Our team! Right:The Flowtastic Arduino module.
 </div>
