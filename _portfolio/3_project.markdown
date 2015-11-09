@@ -1,56 +1,23 @@
 ---
 layout: post
-title: Anomaly Detection
-description: a project that redirects to another website
-img:
-redirect: https://unsplash.com
+title: Anomaly Detection for the Elderly
+description: Detecting anomalous living patterns
+img: /img/Elderly/GMMOnSineWave.png
 ---
 
-Every project has a beautiful feature shocase page. It's easy to include images, in a flexible 3-column grid format. Make your photos 1/3, 2/3, or full width.
+Project Duration: July 2015 - Aug 2015
 
-To give your project a background in the portfolio page, just add the img tag to the front matter like so: 
+At HKC Solutions in Hong Kong I designed and implemented an Anomaly Detection system for homes for the elderly. There was a housing project in Singapore to make a new set of apartments for the elderly "Smart". Singaporean housing officials wanted a system that protects elderly inhabitants against emergency situations. The company was proposing such a system for the project which included anomaly detection.
 
-	---
-	layout: post
-	title: Project
-	description: a project with a background image
-	img: /img/12.jpg
-	---
+We wanted to use simple, cheap sensors in an inhabitant's home to detect anomalies in his behaviour. These are simple motion sensors and door contact sensors. My task was to see how we can learn an inhabitant's normal behaviour using these sensors, and be able to detect anomalous behaviour by looking for deviations from the usual behaviour. 
 
+I don't think I can go into too much detail of how it works, but here's the gist. The sensors give us a pattern of how the inhabitant spends his time in each room on each day. We can find structure and fit parametric distributions to the pattern to summarize the inhabitant's usual behaviour. Given enough data, say data from the past 6-8 weeks, we can assume the distributions are a good approximation to how the inhabitant will behave this week. An anomaly will then be a datapoint of low probability based on the current model.
 
-<div class="img_row">
-	<img class="col one" src="{{ site.baseurl }}/img/1.jpg" alt="" title="example image"/>
-	<img class="col one" src="{{ site.baseurl }}/img/2.jpg" alt="" title="example image"/>
-	<img class="col one" src="{{ site.baseurl }}/img/3.jpg" alt="" title="example image"/>
-</div>
+To find structure in the data I experimented with using k-means and Gaussian Mixture Models (GMMs) for clustering. Here is some Matlab code[link] I wrote to fit a mixture of Gaussians to data using Expectation Maximization (EM) where the M step does MAP estimation instead of maximum likelihood (ML) estimation. I first started using ML estimation but too many numerical errors came up due to singular matrices. Switching to MAP  made those errors go away entirely. More details of MAP estimation are in Kevin Murphy's book on machine learning. A key question I worked on in clustering is how many clusters to pick in the first place. The final algorithm solves this problem in a reasonable way and uses a combination of k-means and multi-variate Gaussians.
+
+<img class="img_row_full" src="{{ site.baseurl }}/img/Elderly/GMMOnSineWave.png" alt="fitting a GMM with 3 components to a sine wave" title="fitting a GMM with 3 components to a sine wave"/>
 <div class="col three caption">
-	Caption photos easily. On the left, a road goes through a tunnel. Middle, leaves artistically fall in a hipster photoshoot. Right, in another hipster photoshoot, a lumberjack grasps a handful of pine needles.
+	GMMs can be very flexible! Here is a GMM with 3 components (contours in red) fit to a scaled-up sine wave.
 </div>
-<div class="img_row">
-	<img class="col three" src="{{ site.baseurl }}/img/5.jpg" alt="" title="example image"/>
-</div>
-<div class="col three caption">
-	This image can also have a caption. It's like magic. 
-</div>
-
-You can also put regular text between your rows of images. Say you wanted to write a little bit about your project before you posted the rest of the images. You describe how you toiled, sweated, *bled* for your project, and then.... you reveal it's glory in the next row of images.
-
-
-<div class="img_row">
-	<img class="col two" src="{{ site.baseurl }}/img/6.jpg" alt="" title="example image"/>
-	<img class="col one" src="{{ site.baseurl }}/img/11.jpg" alt="" title="example image"/>
-</div>
-<div class="col three caption">
-	You can also have artistically styled 2/3 + 1/3 images, like these.
-</div>
-
-
-<br/><br/><br/>
-
-
-The code is simple. Just add a col class to your image, and another class specifying the width: one, two, or three columns wide. Here's the code for the last row of images above: 
-
-	<div class="img_row">
-	  <img class="col two" src="/img/6.jpg"/>
-	  <img class="col one" src="/img/11.jpg"/>
-	</div>
+<br>
+I wrote the program in Octave, which is an open source version of Matlab. The final anomaly detection system was incorporated into the company's system for making an apartment "smart", which I was very excited about. It was actually tested on an elderly inhabitant in Singapore. Hopefully the system will one day save someone's life by quickly detecting and reporting anomalous behaviour.

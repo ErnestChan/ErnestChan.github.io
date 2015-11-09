@@ -375,10 +375,10 @@ pre {
   padding: 5px; }
 
 .img_row_full {
+  display: inline-block;
   max-width: 100%;
   max-height: 100%;
   overflow: hidden;
-  box-sizing: border-box;
   padding: 5px; }
 
 .col {
@@ -400,6 +400,9 @@ pre {
 
 .three {
   width: 100%; }
+
+.half {
+  width: 50%; }
 
 .caption {
   height: 100%;

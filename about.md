@@ -4,26 +4,28 @@ title: About
 permalink: /about/
 ---
 
-<img class="col one right" src="/img/prof_pic.jpg">
+<img class="col one right" src="/img/prof_pic.gif">
 
 <br/>
-Write your biography here. Tell the world about yourself. Link to your favorite <a href="http://reddit.com" target="blank">subreddit</a>. You can put a picture in, too. The code is already in, just name your picture "prof_pic.jpg" and put it in the img folder. 
+Thanks for checking out this site! My name is Ernest Chan. I'm a Master's student in Electrical Engineering (EE) at Rice University specializing in Data Science. I also did my undergraduate degree at Rice in EE and was heading down the traditional EE route until I discovered machine learning. I plan to join industry as a Data Scientist after graduation. Some of my data science/machine learning related projects will be posted on this site.
 
-Link to your social media connections, too. This theme is set up to use <a href="http://fortawesome.github.io/Font-Awesome/" target="blank">Font Awesome icons</a>, like the ones below. Add your facebook, twitter, linkedin, or just disable all of them. 
 
 
 <br/>
 <hr/>
 <br/>
+
+<a href="/img/ErnestChanResume.pdf">Resume</a>
+<br/>
+<hr/>
+<br/>
 <span class="contacticon center">
-	<a href="mailto:you@example.com"><i class="fa fa-envelope-square"></i></a>
-	<a href="https://github.com" target="_blank"><i class="fa fa-github-square"></i></a>
-	<a href="https://www.linkedin.com" target="_blank"><i class="fa fa-linkedin-square"></i></a>
-	<a href="http://tumblr.com" target="_blank"><i class="fa fa-tumblr-square"></i></a>
-	<a href="https://twitter.com" target="_blank"><i class="fa fa-twitter-square"></i></a>
+	<a href="mailto:ekc1@rice.edu"><i class="fa fa-envelope-square"></i></a>
+	<a href="https://github.com/ErnestChan" target="_blank"><i class="fa fa-github-square"></i></a>
+	<a href="https://www.linkedin.com/pub/ernest-chan/73/457/682" target="_blank"><i class="fa fa-linkedin-square"></i></a>
 </span>
 
 <div class="col three caption">
-	You can even add a little note about which of these is the best way to reach you.
+	The best way to reach me is through email.
 </div>
 

@@ -34,7 +34,7 @@ permalink: /portfolio/
         <div class="thumbnail blankbox"></div>
         {% endif %}    
         <span>
-            <h1>{{ project.title }}</h1>
+            <h2>{{ project.title }}</h2>
             <br/>
             <p>{{ project.description }}</p>
         </span>
