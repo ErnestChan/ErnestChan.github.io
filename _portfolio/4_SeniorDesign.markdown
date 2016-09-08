@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Senior Design
-description: Senior Design Project
+title: Senior Design Project
+description:
 img: /img/SD/SingleSlideDesc.png
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Anomaly Detection for the Elderly
-description: Detecting anomalous living patterns
+description:
 img: /img/Elderly/GMMOnSineWave.png
 ---
 
@@ -21,4 +21,4 @@ To find structure in the data I experimented with using k-means and Gaussian Mix
 	GMMs can be very flexible! Here is a GMM with 3 components (contours in red) fit to a scaled-up sine wave.
 </div>
 <br>
-I wrote the program in Octave, which is an open source version of Matlab. The final anomaly detection system was incorporated into the company's system for making an apartment "smart", which I was very excited about. It was actually tested on an elderly inhabitant in Singapore. Hopefully the system will one day save someone's life by quickly detecting and reporting anomalous behaviour.
+I wrote the program in Octave, which is an open source version of Matlab. The final anomaly detection system was incorporated into the company's system for making an apartment "smart", which I was very excited about. It was actually tested on an elderly inhabitant in Singapore. Hopefully the system will one day help someone by quickly detecting and reporting anomalous behaviour.

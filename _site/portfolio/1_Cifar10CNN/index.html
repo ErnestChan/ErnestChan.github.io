@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Object classification with CNNs</title>
+    <meta name="description" content="Professional portfolio and blog of Ernest Chan
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="/portfolio/1_Cifar10CNN/">
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <nav class="site-nav">
+
+      <div class="trigger">
+        <!-- Ernest Chan instead of blog -->
+        <a class="page-link" href="/">Portfolio</a>
+
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+          <a class="page-link" href="/blog/index.html">Blog</a>
+          
+        
+          
+        
+          
+        
+
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Object classification with CNNs</h1>
+    <p class="post-meta"></p>
+  </header>
+
+  <article class="post-content">
+    <p>Project Duration: Mar 2016 - April 2016</p>
+
+<p>The Statistical Machine Learning class I took at Rice during Spring 2016 had an in-class Kaggle competition, which was to see who could classify with the highest accuracy images in the <a href="https://www.cs.toronto.edu/~kriz/cifar.html" target="_blank">Cifar-10 dataset</a>. The Cifar-10 dataset consists of 50,000 training images, 10,000 test images, and 10 classes of images evenly distributed among the training and test set. The Kaggle test set actually had 300,000 test images, of which 10,000 were the actual test images that counted and these were aparently slightly altered to prevent people from cheating.</p>
+
+<p>My project partner and I initially played with some approaches like bag of (visual) words models and adaboosted decision tree models, but to get past bad results, you’d of course need to use <a href="http://cs231n.github.io/convolutional-networks/" target="_blank">convolutional neural networks</a> (CNN). This post is about the CNN approach we took, and how we could have gotten 5th place in the competition. (Could have because we submitted the 5th place result an hour and 18 minutes after the deadline closed).</p>
+
+<h3 id="data">Data</h3>
+
+<p>First of all, let’s look at what the data looks like. The images are RGB 32x32 images, with RGB values between 0 to 255. Because of the small size they’re actually quite blurry. Here’s are examples of a cat and a horse respectively:</p>
+
+<div class="image_row">
+	<img class="col half " src="/img/Cifar10/cat.png" alt="cat" title="cat" />
+	<img class="col half " src="/img/Cifar10/horse.png" alt="horse" title="horse" />
+</div>
+
+<p>Even though the images are small, there are a lot of pixels, 32x32x3=3072 to be exact. This is pretty high dimensional data, and we need a model that can handle that well.</p>
+
+<h3 id="the-learning-model">The learning model</h3>
+
+<p>CNNs have taken the computer vision world by storm by dominating state of the art results in image recognition tasks. We knew we had to use CNNs to get competitive results, and all the best teams in the class used CNNs. To train our CNNs, we used AWS ec2 GPU instances and <a href="https://keras.io/">Keras</a> as our deep learning library. Keras is a library that works on top of Theano or Tensorflow. It abstracts away many of the details in those frameworks and allows building a CNN model by simply specifying the network’s layers.</p>
+
+<p>I won’t go into the details of how CNNs work here, as that can take up an entire <a href="http://cs231n.github.io/">course</a> and there are fantastic explanations of CNNs out there. Here I’ll only go into our approach.</p>
+
+<h3 id="the-allcnn">The AllCNN</h3>
+<p>Our first CNN approach was to try to implement the AllCNN (Jost 2015). The paper resulted in the second highest accuracy on CIFAR­10 by using a larger network than that the original network that the paper was based on, and by using massive data augmentation. The approach is very simple as well. The paper was about questioning the assumption that max-­pooling is a necessary operation in CNNs, and proposed that max­pooling could be replaced by a convolutional layer with the same stride as the maxpooling layer, and the same number of filters as the previous convolutional layer. That’s why it’s the “All” CNN; there are only really convolutional layers.</p>
+
+<p>The paper argues that there are 3 main reasons max­pooling is useful.</p>
+
+<ol>
+  <li>It makes the representation of the image more invariant by taking the “best” feature from some
+area.</li>
+  <li>It reduces spatial dimensionality, allowing higher layers to cover larger parts of the input.</li>
+  <li>Max pooling picks out one feature, instead of mixing them together as a convolution does, and
+might make optimization easier.</li>
+</ol>
+
+<p>They go on to argue and test that only point 2 (reducing spatial dimensionality) is crucial for achieving good performance on CNNs. If this is the case, pooling can be replaced by a convolutional layer with the same stride and kernel size, which will reduce dimensionality by the same amount. The number of filters is the same as that of the previous layer since pooling doesn’t reduce dimensionality in that dimension. The paper also notes that the convolutional layer that replaces pooling could learn an operation similar to pooling, instead of being hard­wired to that operation. This could result in better subsampling functions.</p>
+
+<p>These all seemed like valid points and their results seem to support their arguments. As a result, it seemed like a good option to try. We first jumped to trying to implement the larger version of their network, which had 17 convolutional layers and around 70 million parameters. The structure was inspired by a paper called <a href="https://arxiv.org/abs/1409.6070">“spatially­ sparse convolutional neural networks”</a>, with pooling layers replaced by convolutional layers. We quickly found that this network would not fit in our single gpu’s memory. Sadly, we had to scale back our network.</p>
+
+<p>We then tried to implement their best model in the paper that took up less memory. This is a network with around 1.4 million parameters. Still large, but manageable. It had the following structure:</p>
+
+<p><img class="three" src="/img/Cifar10/AllCNN.png" alt="AllCNN network" title="AllCNN network" style="clear:both" /></p>
+
+<p>We didn’t use any data augmentation to keep things simple in the beginning. To preprocess the data we applied zca whitening and contrast normalization according to Goodfellow, 2013. The activation after each convolutional layer was a ReLU. We used stochastic gradient descent (SGD) with initial learning rate 0.05 and momentum of 0.9. The learning rate schedule was to multiply the learning rate by 0.1 after 200, 250, and 300 epochs. We trained for a total of 350 epochs with batch size of 128 and epoch size of all 50,000 training examples. L2 regularization of 0.001 was applied to all layers’ weights. Weights were initialized using a gaussian distribution with std=0.05. Most of these parameters were given in the paper. Some of the parameters were not disclosed, such as weight initialization method and batch size and we used our own values from reasonable estimations of what a good value would be.</p>
+
+<p>The result is 89.50% accuracy on the test set and 98.0% accuracy on the training set. This is our best result so far. It looks like there was overfitting, which could be a result of low regularization or lack of data augmentation. Our next step was to experiment with changing some parts of this network and adding data augmentation. We liked the structure and simplicity of this network and wanted to try to improve on it.</p>
+
+<h3 id="upgrading-the-allcnn">Upgrading the AllCNN</h3>
+<p>We first decided we’d replicate the AllCNN structure but add several things. First we’ll add data augmentation to expand the training set and combat overfitting. We’ll also add batch normalization after each convolutional layer (but before the activation), change the ReLUs to leaky ReLUs, and initialize the weights using Glorot Uniform (aka Xavier) initialization. We call this network AllCNNUpgraded.
+Here are the reasons for these changes:</p>
+
+<ol>
+  <li>
+    <p>Adding batch normalization. The idea of batch normalization comes from the fact that ZCA whitening an image improves network accuracy. I.e. transforming the inputs to have zero mean, unit variance and the features to be uncorrelated. If this could be somehow applied to every layer, results should improve. Batch normalization is like doing ZCA whitening on each layer. We read on the batch normalization paper (sergey 2015) that batch normalization can speed up training, allow higher learning rates, make the network less dependent on well initialized weights and can be a form of regularization. These all sound like great things and we wanted to try it.</p>
+  </li>
+  <li>
+    <p>Using leaky reLU units instead of regular reLU. Leaky reLU units are different from regular reLU units in that when the input is &lt;0, the output is alpha*x where alpha is some number between 0 and 1 and x is the input. This helps combat the so called “dying reLU problem”. That is, because reLU outputs 0 if input&lt;0, there can be weight updates that result in a reLU never activating on any datapoint again. The weights cause the inputs to the reLU to be &lt;0 for the rest of training. We read that with too high learning rates, a large part of the network can have many ReLU units that never activate across the training set. This seems like a waste of activation units. Leaky ReLU’s try to solve this problem by introducing a gradient of alpha when x&lt;0.</p>
+  </li>
+  <li>
+    <p>Glorot Uniform initialization. The weights are sampled from a uniform distribution with its variance scaled based on the number of neurons feeding in and going out. We read that this initialization allows faster convergence by allowing signals to propagate better through deep networks. Weights that are too high cause the signal to grow too large as it passes through layers, and weights that are too small diminish the signal too much and can worsen the vanishing gradients problem. This initialization scheme was supposedly one of the breakthroughs that allowed deeper networks to be trained.</p>
+  </li>
+</ol>
+
+<p>The AllCNNUpgraded network:</p>
+
+<p><img class="three" src="/img/Cifar10/AllCNNUpgraded.png" alt="AllCNNUpgraded network" title="AllCNNUpgraded network" style="clear:both" /></p>
+
+<p>We augmented the data for the AllCNNUpgraded by doing random horizontal shifts, translations in both x and y directions of no more than 5 pixels, random rotations with a maximum of 20 degrees, and minor shearing operations. We trained the network for 300 epochs, where in the last 20 epochs we stopped using data augmentation and used only the original training images. For these last 20 epochs we reduced the learning rate to 1e­-6. This was done because from an interview on Kaggle with Benjamin Graham (he produced the top result in CIFAR­10) he mentioned that training for a small number of epochs at the end using no data augmentation almost always improved performance. We also reduced batch size to 32 for more frequent weight updates. The network was trained using SGD plus momentum using <a href="http://cs231n.github.io/neural-networks-3/#sgd">Nesterov Momentum</a>. The learning schedule and all other hyper­parameters were the same as the previous network.</p>
+
+<p>The result is 91.58% accuracy on the Kaggle test set. The accuracy on the training set was 96.83%. The last 10 epochs of training with no data augmentation definitely improved performance. It went from around 90.5% to around 91.8% on the validation set. The network took around 15 hours to train.</p>
+
+<p>Here is the class-specific accuracies, confusion matrix, and classification report on the full training set:</p>
+
+<p><img class="three" src="/img/Cifar10/UpgradedClassAccTrain.png" alt="AllCNNUpgraded class accuracies train" title="AllCNNUpgraded class accuracies train" style="clear:both" /></p>
+<div class="image_row">
+	<img class="col half " src="/img/Cifar10/UpgradedConfusionmat.png" alt="AllCNNUpgraded confusion mat" title="AllCNNUpgraded confusion mat" />
+	<img class="col half " src="/img/Cifar10/UpgradedClassReport.png" alt="AllCNNUpgraded classification report" title="AllCNNUpgraded classification report" />
+</div>
+
+<p>It seems that the network does the worst on classes cat and dog. From the classifcation report, cat has the lowest precision, 0.89, and dog has the lowest recall, 0.90. From the confusion matrix, cat is most often misclassified as dog, 132 times, and dog is most often misclassified as cat, 331 times. This makes sense as small furry animals in blurry pictures can easily be a cat or dog. Let’s see if the same weaknesses are apparent in the validation set’s class specific accuracies:</p>
+
+<p><img class="three" src="/img/Cifar10/UpgradedClassAccVal.png" alt="AllCNNUpgraded class accuracies val" title="AllCNNUpgraded class accuracies val" style="clear:both" /></p>
+
+<p>The lower accuracies on classes cat and dog are even more apparent in the validation set, as they have 0.849 and 0.838 accuracy respectively. These metrics gave us a good insight into what the network was good or bad at, and could have provided us direction on how to improve the coming models. For example, we could (and should have) trained the future models with a higher weight on examples in the dog and cat class. More specifically, we could have weighted each class by its validation set error on the previous network, so that classes with higher error (and thus higher weight) increase the loss function more. Using a group of these boosted networks test accuracy would likely have improved by a good amount. Unfortunately, we didn’t look into these metrics until a day before the end of the competition, at which point we were already in the process of training several models without weighting different examples from different classes.</p>
+
+<h3 id="ensemble-of-allcnns">Ensemble of AllCNNs</h3>
+<p>Seeing the success of the AllCNNUpgraded network we wanted to see what variations on the network could do. We trained a total of 5 more variations of the above network, and then ensembled the results to try to improve performance. To not clutter this post, I did not include all the 5 networks’ configurations. The following networks all have an AllCNN structure. The table below contain the trained network results.</p>
+
+<p><img class="three" src="/img/Cifar10/AllNetworks.png" alt="table of all networks trained" title="table of all networks trained" style="clear:both" /></p>
+
+<p>In these networks, we control for overfitting in three ways: data augmentation, dropout and L2 regularization. Our best network, AllCNNLinus, used 2 additional convolutional layers, used ELUs, and padded the input by a small amount. This network may be the best for several reasons. It may be adding the convolutional layers or padding the input, but then AllCNNElmo did both as well and produced worse results, and they had the same learning rate schedule. Perhaps the ELUs helped, but then AllCNNErnest didn’t use ELUs and produced comparably good accuracy. Let’s take a look at the learning history to see if ELUs in AllCNNLinus could have helped speed up convergence:</p>
+
+<p><img class="two" src="/img/Cifar10/HistoryLinusVErnest.png" alt="history for ELU vs. no ELU" title="history for ELU vs. no ELU" style="clear:both" /></p>
+
+<p>AllCNNErnest and AllCNNLinus have the same learning schedule, but AllCNNLinus uses ELUs instead of leaky ReLUs. The base learning rate is 5e­3 and then we multiply the learning rate by 0.1 after epochs 100, 200 and 250 respectively. We can see that for both validation and training sets, accuracy is higher for AllCNNLinus than AllCNNErnest at the same epoch. I.e. red line vs blue line, and cyan line vs green line. This suggests that using ELUs speed up convergence. Although another difference between the networks is AllCNNLinus padded the input image, we do not think that speeded up convergence.</p>
+
+<p>We did not view the learning rate for the AllCNNUpgraded, which was a mistake, but we did for most of the networks in the table above and it gave us great insights into learning rate schedules. Let’s take a look at the history of only AllCNNLinus:</p>
+
+<p><img class="two" src="/img/Cifar10/HistoryLinus.png" alt="HistoryLinus" title="HistoryLinus" style="clear:both" /></p>
+
+<p>The figure does not show the last 40 epochs, which were trained using un-­augmented data and simply looks to be slowly monotonically increasing like in the region from epoch 250 to 300. We can see that there is a jump in accuracy every time we lower the learning rate at epochs 100, 200, 250. The first two jumps are more pronounced. Ideally the learning rate would be lowered earlier before a plateau in accuracy, which we can see starts at around epoch 50 and 150.</p>
+
+<p>Using these insights into learning rate scheduling and the having seen that ELUs might speed up convergence, we trained AllCNNEduardo (which
+uses ELUs). Here is the resulting accuracy history:</p>
+
+<p><img class="two" src="/img/Cifar10/HistoryEduardo.png" alt="HistoryEduardo" title="HistoryEduardo" style="clear:both" /></p>
+
+<p>We can see more jumps in accuracy from the figure. This network produced validation accuracy comparable to our best two networks in about half the number of epochs (160 instead of 320+). It was the only network that used an initialization scheme from He, 2015. Which could have helped. From this network we learned how important learning rate is for performance and training time, and it strongly supports the use of ELUs. We really wished we looked at these plots sooner.</p>
+
+<p>After training these networks we took a look at the class specific accuracies across all networks to see if there are systematic errors. Not surprisingly, the errors are similar to the ones made by AllCNNUpgraded. Here is the mean class specific accuracies across all 6 networks:</p>
+
+<p><img class="three" src="/img/Cifar10/MeanValAcc.png" alt="MeanValAcc" title="MeanValAcc" style="clear:both" /></p>
+
+<p>The highest standard deviations were for classes dog, deer and cat. Although the networks are similarly bad at certain classes, ensembling their predictions might improve performance due to the higher variance on the 3 weakest classes (dog,cat and deer). First, we tried taking a majority vote over all networks. This resulted in 92.2% accuracy on the validation set, not better than AllCNNLinus. We then tried adding up the class probabilities for all networks, then taking class with the highest sum of class probabilities. This gave a small performance boost of 92.69% on the validation set.</p>
+
+<p>We wanted to find a way to use the class probabilities from all networks to generate better predictions. Intuitively, we were hoping to build a classifier that would recognize the strengths and weaknesses of each network, which are reflected in how well their predicted class probabilities line up with actual class predictions. i.e. for a decision tree model this might translate to “if AllCNNLinus has &gt;70% probability on this class, classify it as this class. Else, look at AllCNNEduardo and AllCNNErnest”. To do this, we took the class probabilities and made a 50,000x60 data matrix. For each example in the training set we laid out the predicted class probabilities of each network into a 1x60 vector. That is, the predicted class probabilities of network 1 is in columns 0 to 9, the predicted class probabilities of network 2 is in columns 10 to 19, etc. Using this matrix of predicted class probabilities from all networks, we tried several multi­class classifiers to predict the class of the output image. We used a validation set to pick the hyperparameters. The models we tried were softmax, one­-vs-­all (OVA) logistic regression, and gradient boosted decision trees with deviance loss.</p>
+
+<p>In the end the best model was OVA with cross­validation accuracy of 93.54%.</p>
+
+<p>Unfortunately we did not manage to train all these models and do hyper­parameter sweeps using cross­validation before the competition deadline. However, submitting our result from the ensemble after the deadline we got an accuracy of 93.29%, which would have put us in fifth place. Our team was called Databae:</p>
+
+<p><img class="three" src="/img/Cifar10/LeaderBoard.png" alt="LeaderBoard" title="LeaderBoard" style="clear:both" /></p>
+
+<h3 id="discussion">Discussion</h3>
+<p>We’re quite proud our ensembled result, as it showed we could get a competitive result without training a spatially sparse convolutional network using <a href="https://arxiv.org/abs/1412.6071">fractional max pooling</a> , which is what most of the top scoring teams did. This was the model Benjamin Graham used to obtain the top result on <a href="http://rodrigob.github.io/are_we_there_yet/build/classification_datasets_results.html#43494641522d3130">Cifar-10</a>. His code is available <a href="https://github.com/btgraham/SparseConvNet">here</a>, which is what a bunch of teams used to train that model.</p>
+
+<p>It would have been interesting to see the result if we had the insight to weight classes higher based on how badly our networks performed on them, to try to improve overall accuracy. This may have resulted in a better ensemble. However, the class-specific accuracies show systematic error across all 6 networks, suggesting some classes are inherently harder to classify than others. Maybe the approach to overcome this is simply a larger network, like the one we originally wanted to train but didn’t fit in GPU memory.</p>
+
+<p>The Kaggle competition was a great experience in applying cutting edge CNN models. It was very cool to be able to learn and read about these models and to actually use them and see their power. I definitely plan to continue to learn about CNNs and to explore deep learning in general.</p>
+
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+  	<p>This site was built using <a href="http://jekyllrb.com" target="_blank">Jekyll</a> and is hosted on <a href="https://github.com" target="_blank">Github</a>
+  	</p>
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

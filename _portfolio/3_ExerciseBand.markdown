@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Human Activity Recognition
-description: Classifying gym exercises using IMU data
+title: Human Exercise Recognition
+description:
 img: /img/EBand/Wristband.jpg
 ---
 
@@ -11,7 +11,8 @@ Over the summer of 2015, I set out to use a wearable inertial motion unit (IMU) 
 
 With little background in machine learning, I decided to take a course on <a href="https://www.coursera.org/course/pgm" target="_blank">Probabilistic Graphical Models</a>  (PGMs). I used what I learned from the course to implement a graphical model called Hidden Markov Models (HMM) for exercise classfication. 
 
-The exercises I chose to classify are: prisoner squats, push-ups, triangle push-ups, bicep curls, and sit-ups. 
+The exercises I chose to classify are: prisoner squats, push-ups, triangle push-ups, bicep curls, and sit-ups.
+ 
 The best learned model on these 5 exercises achieved 96% accuracy on classifcation and rep-counting on unseen test data and can distinguish between push-ups and triangle push-ups.
 
 ### Data Collection 
